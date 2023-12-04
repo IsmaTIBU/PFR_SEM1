@@ -1,0 +1,27 @@
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+
+int main() {
+    char phrase[100] = "Tourner à droite jusqu'à trouver la balle rouge";
+    char phraseCopy[100];                                                       // Copie de la phrase pour strtok
+    char *mots[20];
+    int compt = 0;
+
+    strncpy(phraseCopy, phrase, sizeof(phraseCopy));
+    phraseCopy[sizeof(phraseCopy) - 1] = '\0';
+
+    afficher_Action(phrase);                                                    // Appel de la fonction afficher_Action avec la phrase originale
+
+
+    char ponctuation[] = " ,.!?";
+    char *mot = strtok(phraseCopy, ponctuation);
+    while (mot != NULL && compt < 20) {
+        mots[compt++] = mot;
+        mot = strtok(NULL, ponctuation);
+    }
+
+    afficher_Parametre(mots, compt);
+
+    return 0;
+}
