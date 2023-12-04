@@ -1,0 +1,7 @@
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+
+double convertDouble(char *str);
+void afficher_Action(char *phrase);
+void afficher_Parametre(char *mots[], int compt);
