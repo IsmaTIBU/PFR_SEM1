@@ -1,0 +1,90 @@
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+
+double convertDouble(char *str){
+    char *temp;
+    double val = strtod(str, &temp);
+    return val;
+}
+
+void afficher_Action(char *phrase){
+    char ponctuation[] = " ,.!?";
+    char *mot;
+    char *mots[20];
+    char *action = NULL;
+    int compt = 0;
+
+    mot = strtok(phrase, ponctuation);
+    while (mot != NULL && compt < 20) {
+        mots[compt] = mot;
+        compt++;
+
+        if (compt == 1) {
+            if (strcmp(mot, "Avancer") == 0 || strcmp(mot, "Avance") == 0 || strcmp(mot, "Reculer") == 0 ||strcmp(mot, "Recule") == 0 || strcmp(mot, "Tourner") == 0 || strcmp(mot, "Tourne") == 0 || strcmp(mot, "Localiser") == 0 || strcmp(mot, "Localise") == 0)
+                action = mot;
+        }
+        mot = strtok(NULL, ponctuation);
+    }
+
+    if (action != NULL) {
+        printf("\nAction: %s", action);
+    } else {
+        printf("\nNo action found");
+    }
+    printf("\n");
+}
+
+void afficher_Parametre(char *mots[], int compt){
+    char param1[100];
+    char param2[100];
+    int i;
+    double result;
+
+      for (int i = 1; i < compt; i++) {
+        double mesure = convertDouble(mots[i - 1]);
+
+        if (strcmp(mots[i], "metres") == 0 || strcmp(mots[i], "centimetres") == 0 || strcmp(mots[i], "millimetres") == 0) {
+            result = convertDouble(mots[i - 1]);
+            if (strcmp(mots[i], "centimetres") == 0) {
+                result *= 0.01;
+            } else if (strcmp(mots[i], "millimetres") == 0) {
+                result *= 0.001;
+            }
+            sprintf(param2, "%.3f metres ", result);
+        }
+
+        if (strcmp(mots[i], "boule") == 0 || strcmp(mots[i], "balle") == 0 || strcmp(mots[i], "carré") == 0 || strcmp(mots[i], "cube") == 0) {
+
+            // Vérifier s'il y a un mot suivant pour la couleur.
+            if (i + 1 < compt) {
+                sprintf(param2, "%s %s ", mots[i], mots[i + 1]);
+                i++;
+            } else {
+                sprintf(param2, "%s ", mots[i]);
+            }
+        }
+
+        if(strcmp(mots[i], "degrés") == 0) {
+            result=mesure;
+            sprintf(param2, "%.0f %s", result, mots[i]);
+        }
+
+        if(strcmp(mots[i],"droite") == 0) {
+            result = 90;
+            sprintf(param1, "%.0f degrés", result);
+        }
+        else if(strcmp(mots[i],"gauche") == 0){
+            result = -90;
+            sprintf(param1, "%.0f degrés", result);
+        }
+
+        if (strcmp(mots[i], "jusqu'à") == 0 || strcmp(mots[i], "jusqu'au") == 0) {
+            if (i + 2 < compt) {                                        // Vérifier s'il y a deux mots suivants pour la description de l'objet.
+                sprintf(param2, "%s %s", mots[i + 1], mots[i + 2]);
+            }
+        }
+    }
+    printf("Premier parametre: %s\n",param1);
+    printf("Deuxième parametre: %s", param2);
+}
